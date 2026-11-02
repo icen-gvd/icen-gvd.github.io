@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CallCenter GVD</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%231E5FC4'/%3E%3Cpath d='M9 18v-3a7 7 0 0 1 14 0v3' stroke='white' stroke-width='2.5' fill='none'/%3E%3Crect x='7' y='17' width='5' height='7' rx='2' fill='white'/%3E%3Crect x='20' y='17' width='5' height='7' rx='2' fill='white'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<link rel="stylesheet" href="app.css">
+</head>
+<body>
+<!-- ================= LOGIN ================= -->
+<section id="login">
+  <div class="lg-band">
+    <div class="logo"><span class="mk"><i class="bi bi-headset"></i></span>CallCenter GVD</div>
+    <h1>Cada llamada, un pedido más cerca.</h1>
+    <p>Registro de gestiones y reporte de televentas para Grupo Vega Distribución.</p>
+    <div><div class="wave" id="wave"></div><div class="wave-cap"><span>8:00</span><span>gestiones por hora, hoy</span><span>19:00</span></div></div>
+  </div>
+  <div class="lg-main">
+    <form class="lg-card" id="flogin" novalidate>
+      <div><h2>Iniciar sesión</h2><p class="text-secondary mb-0">Entra con el correo y la contraseña que te dio tu supervisor.</p></div>
+      <div><label class="form-label" for="lu"><i class="bi bi-envelope"></i>Correo</label><input class="form-control form-control-lg" id="lu" type="email" autocomplete="username" placeholder="nombre@grupovegadistribucion.pe"></div>
+      <div><label class="form-label" for="lp"><i class="bi bi-key"></i>Contraseña</label><input class="form-control form-control-lg" id="lp" type="password" autocomplete="current-password"></div>
+      <div class="text-danger small fw-semibold" id="lerr" role="alert"></div>
+      <button class="btn btn-primary btn-lg w-100" type="submit" id="lbtn"><i class="bi bi-box-arrow-in-right me-1"></i>Entrar</button>
+      <p class="small text-secondary mb-0">¿No tienes usuario o olvidaste tu contraseña? Pídeselo a tu supervisor.</p>
+    </form>
+  </div>
+</section>
+
+<!-- ================= APP ================= -->
+<div id="app" hidden>
+  <header class="top">
+    <div class="wrap">
+      <div class="logo"><span class="mk"><i class="bi bi-headset"></i></span><span class="d-none d-sm-inline">CallCenter GVD</span></div>
+      <div class="hello"><b id="hola"></b><span id="hola-sub"></span></div>
+      <nav class="mods" role="tablist" aria-label="Módulos" id="mods">
+        <button class="mod" role="tab" data-m="registrar" aria-selected="true"><i class="bi bi-telephone-plus"></i>Registrar</button>
+        <button class="mod" role="tab" data-m="reporte" aria-selected="false" id="mod-rep"><i class="bi bi-bar-chart-line"></i>Reporte <span class="bdg" id="live-bdg" hidden></span></button>
+      </nav>
+      <div class="dropdown userbox ms-auto ms-lg-0">
+        <button class="btn btn-sm bell" data-bs-toggle="dropdown" data-bs-auto-close="outside" type="button" aria-label="Reprogramaciones"><i class="bi bi-bell"></i><span class="bdg" id="notif-n" hidden></span></button>
+        <div class="dropdown-menu dropdown-menu-end notif-menu" id="notif-list"></div>
+      </div>
+      <div class="dropdown userbox">
+        <button class="btn btn-sm d-flex align-items-center gap-2 dropdown-toggle" data-bs-toggle="dropdown" type="button"><span class="av" id="who-av"></span><span class="d-none d-md-inline" id="who-n"></span></button>
+        <ul class="dropdown-menu dropdown-menu-end">
+          <li><h6 class="dropdown-header" id="who-role"></h6></li>
+          <li id="st-items"><h6 class="dropdown-header">Mi estado</h6>
+            <button class="dropdown-item" data-st="Disponible"><i class="bi bi-circle-fill text-success me-2"></i>Disponible</button>
+            <button class="dropdown-item" data-st="Almuerzo"><i class="bi bi-cup-hot text-warning me-2"></i>Almuerzo</button>
+            <button class="dropdown-item" data-st="Baño"><i class="bi bi-pause-circle text-warning me-2"></i>Baño</button>
+            <button class="dropdown-item" data-st="Capacitación"><i class="bi bi-mortarboard text-info me-2"></i>Capacitación</button>
+            <hr class="dropdown-divider"></li>
+          <li><button class="dropdown-item" id="logout"><i class="bi bi-box-arrow-right me-2"></i>Cerrar sesión</button></li>
+        </ul>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+  <!-- ===== MÓDULO 1: REGISTRAR ===== -->
+  <section class="mod-pane" id="m-registrar">
+    <div class="today" id="today"></div>
+    <div class="reg">
+      <form id="f" novalidate class="d-grid gap-3">
+        <div class="card"><div class="cb">
+          <div class="step done"><span class="n">1</span><h3>Vendedor</h3><span class="aside"><i class="bi bi-lock"></i> se toma de tu sesión</span></div>
+          <div class="row g-3">
+            <div class="col-sm-4"><label class="form-label" for="f-cod">Código</label><input class="form-control" id="f-cod" readonly></div>
+            <div class="col-sm-8"><label class="form-label" for="f-nom">Nombre</label><input class="form-control" id="f-nom" readonly></div>
+          </div>
+        </div></div>
+
+        <div class="card"><div class="cb">
+          <div class="step" id="st2"><span class="n">2</span><h3>Detalles del cliente</h3><button class="btn btn-sm btn-outline-primary ms-auto" type="button" id="btn-nuevo"><i class="bi bi-person-plus me-1"></i>Nuevo cliente</button></div>
+          <div class="row g-3">
+            <div class="col-md-5 position-relative">
+              <label class="form-label" for="q"><i class="bi bi-search"></i>Código del cliente</label>
+              <div class="input-group" id="q-grp"><input class="form-control" id="q" autocomplete="off" placeholder="Código, nombre, teléfono o RUC"><button class="btn btn-primary" type="button" id="btn-buscar">Buscar</button></div>
+              <div class="list-group results" id="results" hidden></div>
+            </div>
+            <div class="col-md-7"><label class="form-label" for="c-nom">Nombre</label><input class="form-control fw-semibold" id="c-nom" readonly placeholder="Se llena al elegir el cliente"></div>
+            <div class="col-md-4"><label class="form-label" for="c-dist">Distrito</label><input class="form-control" id="c-dist" readonly></div>
+            <div class="col-md-8"><label class="form-label" for="c-dir">Dirección</label><select class="form-select" id="c-dir" disabled></select></div>
+            <div class="col-md-4"><label class="form-label" for="c-tel">Teléfono</label><div class="input-group"><input class="form-control tnum" id="c-tel" readonly><button class="btn btn-outline-secondary" type="button" id="copytel" aria-label="Copiar teléfono"><i class="bi bi-clipboard"></i></button></div></div>
+            <div class="col-md-4"><span class="form-label d-block">¿El celular es correcto?</span>
+              <div class="btn-group w-100" role="group"><input type="radio" class="btn-check" name="telok" id="tel-si" value="SI" checked><label class="btn btn-outline-secondary" for="tel-si">Sí</label><input type="radio" class="btn-check" name="telok" id="tel-no" value="NO"><label class="btn btn-outline-secondary" for="tel-no">No</label></div></div>
+            <div class="col-md-4"><label class="form-label" for="c-telnew">Número nuevo</label><input class="form-control tnum" id="c-telnew" inputmode="numeric" maxlength="9" placeholder="9 dígitos" disabled></div>
+          </div>
+        </div></div>
+
+        <div class="card"><div class="cb">
+          <div class="step" id="st3"><span class="n">3</span><h3>Detalles de la llamada</h3><span class="aside timer" id="timer"><span class="dot"></span>Duración <span id="timer-v">00:00</span></span></div>
+          <div class="row g-3">
+            <div class="col-md-5"><span class="form-label d-block">Tipo de contacto</span>
+              <div class="btn-group w-100" role="group"><input type="radio" class="btn-check" name="tipo" id="tp-out" value="OUT" checked><label class="btn btn-outline-secondary" for="tp-out"><i class="bi bi-telephone-outbound me-1"></i>Saliente</label><input type="radio" class="btn-check" name="tipo" id="tp-in" value="IN"><label class="btn btn-outline-secondary" for="tp-in"><i class="bi bi-telephone-inbound me-1"></i>Entrante</label></div></div>
+            <div class="col-md-7"><span class="form-label d-block">Canal</span>
+              <div class="btn-group w-100 flex-wrap" role="group" id="g-canal"><input type="radio" class="btn-check" name="canal" id="cn-1" value="Llamada"><label class="btn btn-outline-secondary" for="cn-1"><i class="bi bi-telephone me-1"></i>Llamada</label><input type="radio" class="btn-check" name="canal" id="cn-2" value="Whatsapp"><label class="btn btn-outline-secondary" for="cn-2"><i class="bi bi-whatsapp me-1"></i>Whatsapp</label><input type="radio" class="btn-check" name="canal" id="cn-3" value="Llamada + Whatsapp"><label class="btn btn-outline-secondary" for="cn-3">Ambos</label></div></div>
+            <div class="col-md-4"><label class="form-label" for="estado">Estado del contacto</label><select class="form-select" id="estado"></select></div>
+            <div class="col-md-4"><label class="form-label" for="gestion">Tipo de gestión</label><select class="form-select" id="gestion"></select></div>
+            <div class="col-md-4"><label class="form-label" for="sub">Sub detalle</label><select class="form-select" id="sub"></select></div>
+            <div class="col-md-4"><label class="form-label" for="pedido">¿Hizo pedido?</label><select class="form-select" id="pedido"></select></div>
+            <div class="col-md-4"><label class="form-label" for="intentos">Seguimiento de llamada</label><select class="form-select" id="intentos"></select></div>
+            <div class="col-md-4"><label class="form-label" for="tiempo">Tiempo de llamada</label><select class="form-select" id="tiempo"></select></div>
+            <div class="col-md-4"><label class="form-label" for="frec">Frecuencia de compra</label><select class="form-select" id="frec"></select></div>
+            <div class="col-12" id="x-box" hidden><div class="newbox"><div class="t"><i class="bi bi-stars"></i>Campos nuevos para medir mejor</div><div class="row g-3">
+              <div class="col-md-4" id="x-monto" hidden><label class="form-label" for="monto">Monto del pedido</label><div class="input-group"><span class="input-group-text">S/</span><input class="form-control tnum" id="monto" inputmode="decimal" placeholder="0.00"></div></div>
+              <div class="col-md-4" id="x-erp" hidden><label class="form-label" for="erp">N° de pedido en el ERP</label><input class="form-control" id="erp" placeholder="Opcional"></div>
+              <div class="col-md-4" id="x-motivo" hidden><label class="form-label" for="motivo">Motivo de no compra</label><select class="form-select" id="motivo"></select></div>
+              <div class="col-12" id="x-prox" hidden><label class="form-label" for="prox">Reprogramar para <span class="text-secondary fw-normal">te avisaremos a esa hora</span></label><div class="d-flex flex-wrap gap-2 align-items-center"><input class="form-control" id="prox" type="datetime-local" style="max-width:240px"><div class="btn-group btn-group-sm flex-wrap" id="proxq"></div></div></div>
+            </div></div></div>
+            <div class="col-12"><label class="form-label" for="obs">Observación</label><textarea class="form-control" id="obs" rows="2" placeholder="Ej. Pide que lo llamen después de las 4 pm"></textarea></div>
+          </div>
+        </div></div>
+
+        <div class="actionbar d-flex align-items-center gap-2 flex-wrap">
+          <span class="text-danger small fw-semibold me-auto" id="errsum" role="alert"></span>
+          <button class="btn btn-outline-secondary" type="button" id="btn-limpiar"><i class="bi bi-eraser me-1"></i>Limpiar</button>
+          <button class="btn btn-success px-4" type="submit"><i class="bi bi-check2-circle me-1"></i>Guardar gestión</button>
+        </div>
+      </form>
+
+      <aside class="d-grid gap-3">
+        <div class="card" id="ficha"></div>
+        <div class="card"><div class="ch"><span class="hi o"><i class="bi bi-calendar-check"></i></span><div><h3>Mi agenda</h3><p id="ag-sub"></p></div></div><div class="list-group list-group-flush mt-2" id="agenda"></div></div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ===== MÓDULO 2: REPORTE (solo supervisor) ===== -->
+  <section class="mod-pane" id="m-reporte" hidden>
+    <div class="card live"><div class="ch"><span class="hi"><i class="bi bi-broadcast"></i></span><div><h3><span class="live-dot"></span>Registrado en la app nueva</h3><p>Lo que los vendedores guardan desde el módulo Registrar aparece aquí al instante.</p></div></div>
+      <div class="cb">
+        <div class="rep-kpis mb-3" id="live-kpis"></div>
+        <div class="tbl" style="max-height:300px"><table class="table table-hover align-middle" id="t-live"></table></div>
+      </div></div>
+
+    <div class="crit-note"><span class="ai"><i class="bi bi-exclamation-octagon"></i></span><div><b>La app actual de Power Apps se dejó de usar</b><p id="alert-txt"></p></div></div>
+    <div class="rep-kpis" id="rep-kpis"></div>
+
+    <nav class="subtabs" role="tablist" aria-label="Secciones del reporte">
+      <button class="stab" role="tab" data-p="resumen" aria-selected="true"><i class="bi bi-grid-1x2"></i>Resumen</button>
+      <button class="stab" role="tab" data-p="agentes" aria-selected="false"><i class="bi bi-headset"></i>Agentes</button>
+      <button class="stab" role="tab" data-p="clientes" aria-selected="false"><i class="bi bi-people"></i>Clientes</button>
+      <button class="stab" role="tab" data-p="cuando" aria-selected="false"><i class="bi bi-bullseye"></i>Cuándo vender</button>
+      <button class="stab" role="tab" data-p="calidad" aria-selected="false"><i class="bi bi-clipboard2-check"></i>Calidad y mejoras</button>
+    </nav>
+
+    <section class="spane" id="p-resumen">
+      <div class="g2">
+        <div class="card"><div class="ch"><span class="hi"><i class="bi bi-bar-chart-line"></i></span><div><h3>Gestiones por mes</h3><p>Del pico de junio a casi cero en octubre.</p></div></div><div class="cb"><div class="cbox"><canvas id="ch-mes"></canvas></div></div></div>
+        <div class="card"><div class="ch"><span class="hi o"><i class="bi bi-graph-up-arrow"></i></span><div><h3>Conversión por mes</h3><p>Sube porque se dejaron de anotar los intentos sin venta.</p></div></div><div class="cb"><div class="cbox"><canvas id="ch-conv"></canvas></div></div></div>
+      </div>
+      <div class="card"><div class="ch"><span class="hi"><i class="bi bi-person-workspace"></i></span><div><h3>Agentes que registraron cada semana</h3><p>Códigos con al menos una gestión en la semana.</p></div></div><div class="cb"><div class="cbox sm"><canvas id="ch-sem"></canvas></div></div></div>
+      <div class="finds" id="finds"></div>
+    </section>
+
+    <section class="spane" id="p-agentes" hidden>
+      <div class="card"><div class="ch"><span class="hi"><i class="bi bi-grid-3x3-gap"></i></span><div><h3>Gestiones por agente y mes</h3><p>Más intenso, más gestiones. Se ve cuándo dejó de registrar cada uno.</p></div></div><div class="cb"><div class="heat" id="heat"></div></div></div>
+      <div class="card"><div class="ch"><span class="hi"><i class="bi bi-table"></i></span><div><h3>Detalle por agente</h3><p>"Min. entre" es la mediana de minutos entre dos gestiones seguidas; menos de 1.5 sugiere registro en lote. Toca un encabezado para ordenar.</p></div></div><div class="cb"><div class="tbl"><table class="table table-hover align-middle" id="t-ag"></table></div></div></div>
+    </section>
+
+    <section class="spane" id="p-clientes" hidden>
+      <div class="g2">
+        <div class="card"><div class="ch"><span class="hi"><i class="bi bi-funnel"></i></span><div><h3>Embudo de clientes</h3><p>De los clientes llamados hasta los que vuelven a comprar.</p></div></div><div class="cb"><div class="funnel" id="funnel"></div></div></div>
+        <div class="card"><div class="ch"><span class="hi"><i class="bi bi-arrow-repeat"></i></span><div><h3>Días entre una compra y la siguiente</h3><p>La mitad de las recompras ocurre en 7 días o menos.</p></div></div><div class="cb"><div class="cbox"><canvas id="ch-recompra"></canvas></div></div></div>
+      </div>
+      <div class="g2">
+        <div class="card"><div class="ch"><span class="hi"><i class="bi bi-telephone"></i></span><div><h3>Gestiones por cliente</h3><p>Veces que se gestionó a cada cliente.</p></div></div><div class="cb"><div class="cbox sm"><canvas id="ch-llam"></canvas></div></div></div>
+        <div class="card"><div class="ch"><span class="hi"><i class="bi bi-bag-check"></i></span><div><h3>Ventas por cliente</h3><p>Ventas OK en días distintos por cliente.</p></div></div><div class="cb"><div class="cbox sm"><canvas id="ch-vcli"></canvas></div></div></div>
+      </div>
+    </section>
+
+    <section class="spane" id="p-cuando" hidden>
+      <div class="g3">
+        <div class="card"><div class="ch"><span class="hi"><i class="bi bi-calendar-week"></i></span><div><h3>Por frecuencia de compra</h3><p>Conversión según la frecuencia anotada.</p></div></div><div class="cb"><div class="cbox sm"><canvas id="ch-frec"></canvas></div></div></div>
+        <div class="card"><div class="ch"><span class="hi"><i class="bi bi-clock"></i></span><div><h3>Por hora del día</h3><p>Horas con 50 gestiones o más.</p></div></div><div class="cb"><div class="cbox sm"><canvas id="ch-hora"></canvas></div></div></div>
+        <div class="card"><div class="ch"><span class="hi"><i class="bi bi-calendar3"></i></span><div><h3>Por día de la semana</h3><p>Domingo excluido por pocos registros.</p></div></div><div class="cb"><div class="cbox sm"><canvas id="ch-dia"></canvas></div></div></div>
+      </div>
+      <div class="g2">
+        <div class="card"><div class="ch"><span class="hi o"><i class="bi bi-whatsapp"></i></span><div><h3>Conversión por canal</h3><p>Todo el periodo contra los últimos 3 meses.</p></div></div><div class="legend"><span><i style="background:var(--s1)"></i>Todo el periodo</span><span><i style="background:var(--s2)"></i>Últimos 3 meses</span></div><div class="cb"><div class="cbox"><canvas id="ch-canal"></canvas></div></div></div>
+        <div class="card"><div class="ch"><span class="hi"><i class="bi bi-geo-alt"></i></span><div><h3>Distritos con más gestiones</h3><p>Azul: convierte 60% o más. Gris: por debajo.</p></div></div><div class="cb"><div class="cbox lg"><canvas id="ch-dist"></canvas></div></div></div>
+      </div>
+    </section>
+
+    <section class="spane" id="p-calidad" hidden>
+      <div class="card"><div class="ch"><span class="hi o"><i class="bi bi-clipboard2-x"></i></span><div><h3>Problemas en la data actual</h3><p id="q-sub"></p></div></div><div class="cb" id="quality"></div></div>
+      <div class="adds">
+        <div class="card add"><span class="ai"><i class="bi bi-telephone-plus"></i></span><h4>Registrar cada intento</h4><p>No solo las ventas. Sin esto no se miden contactabilidad ni productividad. La app nueva lo hace obligatorio.</p></div>
+        <div class="card add"><span class="ai"><i class="bi bi-stopwatch"></i></span><h4>Duración automática</h4><p>El cronómetro reemplaza el "15 min" que hoy marca casi todo el mundo.</p></div>
+        <div class="card add"><span class="ai"><i class="bi bi-calendar-plus"></i></span><h4>Próxima acción con fecha</h4><p>Arma la agenda y una recompra a los 7 días de cada venta.</p></div>
+        <div class="card add"><span class="ai"><i class="bi bi-cash-coin"></i></span><h4>Monto y N° de pedido</h4><p>Para medir soles vendidos y cruzar con el pedido real del ERP.</p></div>
+      </div>
+    </section>
+  </section>
+  </main>
+</div>
+
+<!-- Modal nuevo cliente -->
+<div class="modal fade" id="m-nuevo" tabindex="-1" aria-labelledby="m-nuevo-t" aria-hidden="true"><div class="modal-dialog modal-dialog-centered"><div class="modal-content rounded-4">
+  <form id="fn" novalidate>
+    <div class="modal-header"><h5 class="modal-title fw-bold" id="m-nuevo-t">Registrar cliente nuevo</h5><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button></div>
+    <div class="modal-body row g-3">
+      <div class="col-6"><label class="form-label" for="n-doc">DNI o RUC</label><input class="form-control" id="n-doc" inputmode="numeric" maxlength="11" placeholder="8 u 11 dígitos"></div>
+      <div class="col-6"><label class="form-label" for="n-tel">Teléfono</label><input class="form-control" id="n-tel" inputmode="numeric" maxlength="9" placeholder="9 dígitos"></div>
+      <div class="col-12"><label class="form-label" for="n-nom">Nombre o razón social</label><input class="form-control" id="n-nom"></div>
+      <div class="col-6"><label class="form-label" for="n-dist">Distrito</label><input class="form-control" id="n-dist"></div>
+      <div class="col-6"><label class="form-label" for="n-dir">Dirección</label><input class="form-control" id="n-dir"></div>
+      <div class="col-12 text-danger small fw-semibold" id="n-err"></div>
+    </div>
+    <div class="modal-footer"><button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button><button type="submit" class="btn btn-primary">Agregar cliente</button></div>
+  </form>
+</div></div></div>
+
+<div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index:1100">
+  <div id="toast" class="toast align-items-center text-bg-dark border-0" role="status" aria-live="polite" aria-atomic="true"><div class="d-flex"><div class="toast-body fw-semibold" id="toast-b"></div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Cerrar"></button></div></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="config.js"></script>
+<script src="historico.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
