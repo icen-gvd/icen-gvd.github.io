@@ -3,5 +3,6 @@
 window.CFG = {
   supabaseUrl: 'https://cbxudxeqmmioogoqhnuo.supabase.co',
   supabaseKey: 'sb_publishable_vZrfMThLgaUN0xX7CTKGaw_2cHB4DoW',
-  metaDiaria: 60
+  metaDiaria: 60,
+  dominioCuentas: 'callcenter.icen'   /* cada cuenta es <codigo>@callcenter.icen; el usuario solo escribe su código */
 };

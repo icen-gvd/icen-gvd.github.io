@@ -99,11 +99,13 @@ function go(m) {
 $$('.mod').forEach((b) => b.addEventListener('click', () => go(b.dataset.m)));
 $('#logout').onclick = async () => { if (canal) sb.removeChannel(canal); await sb.auth.signOut(); ME = null; REC = []; $('#app').hidden = true; $('#login').hidden = false; $('#lp').value = ''; };
 $('#flogin').addEventListener('submit', async (e) => {
-  e.preventDefault(); const email = $('#lu').value.trim(), password = $('#lp').value;
-  if (!email || !password) { $('#lerr').textContent = 'Escribe tu correo y tu contraseña.'; return; }
+  e.preventDefault(); const usuario = $('#lu').value.trim(), password = $('#lp').value;
+  if (!usuario || !password) { $('#lerr').textContent = 'Escribe tu código y tu contraseña.'; return; }
+  /* El código se convierte en el correo interno de la cuenta: 01CALL02 -> 01call02@callcenter.icen */
+  const email = usuario.includes('@') ? usuario : `${usuario.toLowerCase()}@${CFG.dominioCuentas}`;
   $('#lbtn').disabled = true; $('#lerr').textContent = '';
   const {error} = await sb.auth.signInWithPassword({email, password});
-  if (error) { $('#lerr').textContent = 'Correo o contraseña incorrectos.'; $('#lbtn').disabled = false; return; }
+  if (error) { $('#lerr').textContent = 'Código o contraseña incorrectos.'; $('#lbtn').disabled = false; return; }
   if (await cargarPerfil()) await entrar();
   $('#lbtn').disabled = false;
 });

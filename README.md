@@ -21,20 +21,19 @@ La clave de `config.js` es la **publicable**: está hecha para ir en el navegado
 
 ## Dar acceso a una persona
 
-1. En Supabase: **Authentication → Users → Add user → Create new user**, con su correo y una contraseña. Marca **Auto Confirm User**.
-2. En **SQL Editor**, enlaza ese usuario con su código:
+Cada persona entra con su **código** (ej. `01CALL02`) y una contraseña. Por dentro, la cuenta usa el correo `<código en minúsculas>@callcenter.icen`, que no recibe mensajes: es solo un identificador.
+
+1. En Supabase: **Authentication → Users → Add user → Create new user**.
+2. **Email:** el código en minúsculas + `@callcenter.icen`, por ejemplo `01call02@callcenter.icen`. Para el supervisor: `sup-call@callcenter.icen`.
+3. **Password:** la contraseña que le darás a esa persona.
+4. Marca **Auto Confirm User** y crea.
+
+La cuenta se enlaza sola con su fila de `vendedores` (un trigger de la base lo hace). El rol sale de esa fila: `SUP-CALL` es supervisor (`admin`); los códigos CALL son vendedores.
+
+Para que otra persona sea supervisor:
 
 ```sql
--- Vendedor que ya está en la tabla vendedores
-update public.vendedores
-set user_id = (select id from auth.users where email = 'correo@grupovegadistribucion.pe')
-where codigo = '01CALL02';
-
--- Supervisor (se crea su fila con rol admin)
-insert into public.vendedores (codigo, nombre, rol, user_id)
-values ('SUP-CALL', 'NOMBRE DEL SUPERVISOR', 'admin',
-        (select id from auth.users where email = 'supervisor@grupovegadistribucion.pe'))
-on conflict (codigo) do update set rol = 'admin', user_id = excluded.user_id;
+update public.vendedores set rol = 'admin' where codigo = '02CALL10';
 ```
 
 Para quitar el acceso: `update public.vendedores set activo = false where codigo = '...';`
